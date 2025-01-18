@@ -9,5 +9,7 @@ namespace BlogCore_ASPNetMVC_Net8.Data
             : base(options)
         {
         }
+
+        // Add here all of the needed models to use for the application
     }
 }
