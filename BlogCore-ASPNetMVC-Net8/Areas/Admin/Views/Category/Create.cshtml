@@ -1,0 +1,42 @@
+﻿@model BlogCore_ASPNetMVC_Net8.Models.Category
+
+@{
+    ViewData["Title"] = "Create Category";
+}
+
+<br/>
+<br/>
+<h3 class="text-center">Create new category</h3>
+<form method="post" asp-action="Create">
+    <div class="row px-2 offset-1 border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-10 offset-1 mt-4">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Name"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Name" class="form-control" placeholder="Type your name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <br/>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Order"></label>
+                </div>
+                <br />
+                <div class="col-8">
+                    <input asp-for="Order" class="form-control" placeholder="Type your order" />
+                    <span asp-validation-for="Order" class="text-danger"></span>
+                </div>
+            </div>
+            <br />
+            <div class="form-group row">
+                <div class="col-8">
+                    <partial name="_ViewCreateBack" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
