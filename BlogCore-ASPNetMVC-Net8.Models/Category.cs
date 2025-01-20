@@ -15,6 +15,7 @@ namespace BlogCore_ASPNetMVC_Net8.Models
         [Required(ErrorMessage = "The Category is required")]
         [Display(Name = "Category Name")]
         public string Name { get; set; }
+
         [Display(Name = "Visualization order")]
         public int? Order { get; set; }
     }
