@@ -1,4 +1,6 @@
 using BlogCore_ASPNetMVC_Net8.Data;
+using BlogCore_ASPNetMVC_Net8.Data.Repository;
+using BlogCore_ASPNetMVC_Net8.Data.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +15,9 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+// Add WorkContainer to the Dependency Injection Container
+builder.Services.AddScoped<IWorkContainer, WorkContainer>();
 
 var app = builder.Build();
 
