@@ -8,10 +8,15 @@ namespace BlogCore_ASPNetMVC_Net8.Areas.Admin.Controllers
     public class ArticleController : Controller
     {
         private readonly IWorkContainer _workContainer;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public ArticleController(IWorkContainer workContainer)
+        public ArticleController(
+            IWorkContainer workContainer,
+            IWebHostEnvironment hostingEnvironment
+            )
         {
             _workContainer = workContainer;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         [HttpGet]
@@ -29,6 +34,42 @@ namespace BlogCore_ASPNetMVC_Net8.Areas.Admin.Controllers
                 CategoryList = _workContainer.CategoryRepository.GetCategoryList()
             };
 
+            return View(articleVM);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(ArticleVM articleVM)
+        {
+            if (ModelState.IsValid)
+            {
+                string mainPath = _hostingEnvironment.WebRootPath;
+                var files = HttpContext.Request.Form.Files;
+                if (articleVM.Article.Id == 0 && files.Count() > 0)
+                {
+                    // New Article
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploads = Path.Combine(mainPath, @"images\articles");
+                    var extension = Path.GetExtension(files[0].FileName);
+                    using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                    {
+                        files[0].CopyTo(fileStreams);
+                    }
+                    articleVM.Article.URLImage = @"\images\articles\" + fileName + extension;
+                    articleVM.Article.CreatedDate = DateTime.Now.ToString();
+
+                    _workContainer.ArticleRepository.Add(articleVM.Article);
+                    _workContainer.Save();
+
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ModelState.AddModelError("Image", "Image is required");
+                }
+            }
+
+            articleVM.CategoryList = _workContainer.CategoryRepository.GetCategoryList();
             return View(articleVM);
         }
 

@@ -20,8 +20,7 @@ namespace BlogCore_ASPNetMVC_Net8.Models
         [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
 
-        [Display(Name = "Created Date")]
-        public string CreatedDate { get; set; }
+        public string CreatedDate { get; set; } = DateTime.Now.ToString();
 
         [DataType(DataType.ImageUrl)]
         [Display(Name = "Image")]
