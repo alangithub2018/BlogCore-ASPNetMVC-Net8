@@ -22,4 +22,8 @@
     <ProjectReference Include="..\BlogCore-ASPNetMVC-Net8.Data\BlogCore-ASPNetMVC-Net8.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\articles\" />
+  </ItemGroup>
+
 </Project>
