@@ -10,6 +10,8 @@ namespace BlogCore_ASPNetMVC_Net8.Data.Repository.IRepository
     {
         ICategoryRepository CategoryRepository { get; }
 
+        IArticleRepository ArticleRepository { get; }
+
         void Save();
     }
 }

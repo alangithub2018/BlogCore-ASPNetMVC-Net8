@@ -17,6 +17,7 @@ namespace BlogCore_ASPNetMVC_Net8.Models
         public string Name { get; set; }
 
         [Display(Name = "Visualization order")]
+        [Range(1, 100, ErrorMessage = "Value must be between 1 and 100")]
         public int? Order { get; set; }
     }
 }
