@@ -5,31 +5,32 @@ $(document).ready(function () {
 });
 
 function loadDataTable() {
-    dataTable = $("#tblCategory").DataTable({
+    dataTable = $("#tblArticle").DataTable({
         "ajax": {
-            "url": "/admin/category/GetAll",
+            "url": "/admin/article/GetAll",
             "type": "GET",
             "datatype": "json"
         },
         "columns": [
             { "data": "id", "width": "5%" },
-            { "data": "name", "width": "40%" },
-            { "data": "order", "width": "10%" },
+            { "data": "name", "width": "20%" },
+            { "data": "category.name", "width": "25%" },
+            { "data": "createdDate", "width": "20%" },
             {
                 "data": "id",
                 "render": function (data)
                 {
                     return `<div class="text-center">
-                                <a href="/Admin/Category/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer; width:140px;">
+                                <a href="/Admin/Article/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer; width:140px;">
                                 <i class="fa fa-pencil"></i> Edit
                                 </a>
                                 &nbsp;
-                                <a onclick=Delete("/Admin/Category/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer; width:140px;">
+                                <a onclick=Delete("/Admin/Article/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer; width:140px;">
                                 <i class="fa fa-trash-alt"></i> Delete
                                 </a>
                             </div>
                     `;
-                }, "width": "45%"
+                }, "width": "30%"
             },
         ],
     })
