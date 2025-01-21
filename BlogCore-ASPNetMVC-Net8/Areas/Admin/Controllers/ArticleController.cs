@@ -148,6 +148,12 @@ namespace BlogCore_ASPNetMVC_Net8.Areas.Admin.Controllers
         public IActionResult Delete(int id)
         {
             var objFromDb = _workContainer.ArticleRepository.Get(id);
+            string mainPath = _hostingEnvironment.WebRootPath;
+            var imagePath = Path.Combine(mainPath, objFromDb.URLImage.TrimStart('\\'));
+            if (System.IO.File.Exists(imagePath))
+            {
+                System.IO.File.Delete(imagePath);
+            }
             if (objFromDb == null)
             {
                 return Json(new { success = false, message = "Error deleting article" });
@@ -157,7 +163,6 @@ namespace BlogCore_ASPNetMVC_Net8.Areas.Admin.Controllers
             _workContainer.Save();
             return Json(new { success = true, message = "Article deleted successfully" });
         }
-
 
         #endregion
     }
