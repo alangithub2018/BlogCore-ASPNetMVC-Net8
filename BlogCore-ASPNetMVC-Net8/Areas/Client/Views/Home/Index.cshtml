@@ -1,8 +1,35 @@
-﻿@{
+﻿@model BlogCore_ASPNetMVC_Net8.Models.ViewModels.HomeVM
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row mt-1">
+    <div class="col-sm-12">
+        <h1 class="text-center text-dark bg-secondary py-1">Latest courses and tutorials</h1>
+    </div>
 </div>
+
+@if(Model.Articles.Count() > 0) {
+    <hr />
+    <div class="row">
+        @foreach (var article in Model.Articles.OrderBy(o => o.Id))
+        {
+            <div class="col-4">
+                <div class="card mb-3">
+                    <img src="@article.URLImage" class="card-img-top" width="100%" alt="@article.Name" />
+                    <div class="card-body">
+                        <h5 class="card-title">@article.Name</h5>
+                        <a asp-action="Details" class="btn btn-success" style="border-radius:10px;" asp-route-id="@article.Id">Read more</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+} else {
+    <div class="row mt-1">
+        <div class="col-sm-12">
+            <h2 class="text-center text-white bg-secondary py-1">No articles found</h2>
+        </div>
+    </div>
+}
