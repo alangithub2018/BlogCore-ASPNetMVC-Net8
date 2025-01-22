@@ -14,5 +14,7 @@ namespace BlogCore_ASPNetMVC_Net8.Data
         // Add here all of the needed models to use for the application
         public DbSet<Category> Category { get; set; }
         public DbSet<Article> Article { get; set; }
+
+        public DbSet<Slider> Slider { get; set; }
     }
 }

@@ -1,25 +1,21 @@
 ﻿using BlogCore_ASPNetMVC_Net8.Data.Repository.IRepository;
-using BlogCore_ASPNetMVC_Net8.Models.ViewModels;
+using BlogCore_ASPNetMVC_Net8.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogCore_ASPNetMVC_Net8.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ArticleController : Controller
+    public class SliderController : Controller
     {
         private readonly IWorkContainer _workContainer;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public ArticleController(
-            IWorkContainer workContainer,
-            IWebHostEnvironment hostingEnvironment
-            )
+        public SliderController(IWorkContainer workContainer, IWebHostEnvironment hostingEnvironment)
         {
             _workContainer = workContainer;
             _hostingEnvironment = hostingEnvironment;
         }
 
-        [HttpGet]
         public IActionResult Index()
         {
             return View();
@@ -28,37 +24,30 @@ namespace BlogCore_ASPNetMVC_Net8.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ArticleVM articleVM = new ArticleVM() 
-            {
-                Article = new BlogCore_ASPNetMVC_Net8.Models.Article() { },
-                CategoryList = _workContainer.CategoryRepository.GetCategoryList()
-            };
-
-            return View(articleVM);
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ArticleVM articleVM)
+        public IActionResult Create(Slider slider)
         {
-            if (ModelState.ErrorCount < 4)
+            if (ModelState.ErrorCount < 2)
             {
                 string mainPath = _hostingEnvironment.WebRootPath;
                 var files = HttpContext.Request.Form.Files;
-                if (articleVM.Article.Id == 0 && files.Count() > 0)
+                if (files.Count() > 0)
                 {
                     // New Article
                     string fileName = Guid.NewGuid().ToString();
-                    var uploads = Path.Combine(mainPath, @"images\articles");
+                    var uploads = Path.Combine(mainPath, @"images\sliders");
                     var extension = Path.GetExtension(files[0].FileName);
                     using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
                     {
                         files[0].CopyTo(fileStreams);
                     }
-                    articleVM.Article.URLImage = @"\images\articles\" + fileName + extension;
-                    articleVM.Article.CreatedDate = DateTime.Now.ToString();
+                    slider.URLImage = @"\images\sliders\" + fileName + extension;
 
-                    _workContainer.ArticleRepository.Add(articleVM.Article);
+                    _workContainer.SliderRepository.Add(slider);
                     _workContainer.Save();
 
                     return RedirectToAction(nameof(Index));
@@ -69,29 +58,40 @@ namespace BlogCore_ASPNetMVC_Net8.Areas.Admin.Controllers
                 }
             }
 
-            articleVM.CategoryList = _workContainer.CategoryRepository.GetCategoryList();
-            return View(articleVM);
+            return View(slider);
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id != null)
+            {
+                Slider slider = _workContainer.SliderRepository.Get(id.GetValueOrDefault());
+                return View(slider);
+            }
+
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(ArticleVM articleVM)
+        public IActionResult Edit(Slider slider)
         {
-            if (ModelState.ErrorCount < 4)
+            if (ModelState.ErrorCount < 2)
             {
                 string mainPath = _hostingEnvironment.WebRootPath;
                 var files = HttpContext.Request.Form.Files;
 
-                var articleFromDb = _workContainer.ArticleRepository.Get(articleVM.Article.Id);
+                var sliderFromDb = _workContainer.SliderRepository.Get(slider.Id);
 
                 if (files.Count() > 0)
                 {
                     // new image for article
                     string fileName = Guid.NewGuid().ToString();
-                    var uploads = Path.Combine(mainPath, @"images\articles");
+                    var uploads = Path.Combine(mainPath, @"images\sliders");
                     var extension = Path.GetExtension(files[0].FileName);
 
-                    var imagePath = Path.Combine(mainPath, articleFromDb.URLImage.TrimStart('\\'));
+                    var imagePath = Path.Combine(mainPath, sliderFromDb.URLImage.TrimStart('\\'));
                     if (System.IO.File.Exists(imagePath))
                     {
                         System.IO.File.Delete(imagePath);
@@ -102,51 +102,34 @@ namespace BlogCore_ASPNetMVC_Net8.Areas.Admin.Controllers
                     {
                         files[0].CopyTo(fileStreams);
                     }
-                    articleVM.Article.URLImage = @"\images\articles\" + fileName + extension;
-                    articleVM.Article.CreatedDate = DateTime.Now.ToString();
+                    slider.URLImage = @"\images\sliders\" + fileName + extension;
                 }
                 else
                 {
-                    articleVM.Article.URLImage = articleFromDb.URLImage;
+                    slider.URLImage = sliderFromDb.URLImage;
                 }
 
-                _workContainer.ArticleRepository.Update(articleVM.Article);
+                _workContainer.SliderRepository.Update(slider);
                 _workContainer.Save();
 
                 return RedirectToAction(nameof(Index));
             }
 
-            articleVM.CategoryList = _workContainer.CategoryRepository.GetCategoryList();
-            return View(articleVM);
-        }
-
-        [HttpGet]
-        public IActionResult Edit(int? id)
-        {
-            ArticleVM articleVM = new ArticleVM()
-            {
-                Article = _workContainer.ArticleRepository.Get(id.GetValueOrDefault()),
-                CategoryList = _workContainer.CategoryRepository.GetCategoryList()
-            };
-            if (articleVM.Article == null)
-            {
-                return NotFound();
-            }
-
-            return View(articleVM);
+            return View(slider);
         }
 
         #region API Calls
+
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Json(new { data = _workContainer.ArticleRepository.GetAll(includeProperties: "Category") });
+            return Json(new { data = _workContainer.SliderRepository.GetAll() });
         }
 
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var objFromDb = _workContainer.ArticleRepository.Get(id);
+            var objFromDb = _workContainer.SliderRepository.Get(id);
             string mainPath = _hostingEnvironment.WebRootPath;
             var imagePath = Path.Combine(mainPath, objFromDb.URLImage.TrimStart('\\'));
             if (System.IO.File.Exists(imagePath))
@@ -155,12 +138,12 @@ namespace BlogCore_ASPNetMVC_Net8.Areas.Admin.Controllers
             }
             if (objFromDb == null)
             {
-                return Json(new { success = false, message = "Error deleting article" });
+                return Json(new { success = false, message = "Error deleting slider" });
             }
 
-            _workContainer.ArticleRepository.Remove(objFromDb);
+            _workContainer.SliderRepository.Remove(objFromDb);
             _workContainer.Save();
-            return Json(new { success = true, message = "Article deleted successfully" });
+            return Json(new { success = true, message = "Slider deleted successfully" });
         }
 
         #endregion

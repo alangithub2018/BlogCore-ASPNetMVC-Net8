@@ -16,11 +16,14 @@ namespace BlogCore_ASPNetMVC_Net8.Data.Repository
             _context = context;
             CategoryRepository = new CategoryRepository(_context);
             ArticleRepository = new ArticleRepository(_context);
+            SliderRepository = new SliderRepository(_context);
         }
 
         public ICategoryRepository CategoryRepository { get; private set; }
 
         public IArticleRepository ArticleRepository { get; private set; }
+
+        public ISliderRepository SliderRepository { get; private set; }
 
         public void Dispose()
         {
