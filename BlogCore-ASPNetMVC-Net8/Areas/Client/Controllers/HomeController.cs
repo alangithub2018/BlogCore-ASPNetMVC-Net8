@@ -30,6 +30,17 @@ namespace BlogCore_ASPNetMVC_Net8.Areas.Client.Controllers
             return View(homeVM);
         }
 
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var article = _workContainer.ArticleRepository.GetFirstOrDefault(a => a.Id == id);
+            if (article == null)
+            {
+                return NotFound();
+            }
+            return View(article);
+        }
+
         public IActionResult Privacy()
         {
             return View();
