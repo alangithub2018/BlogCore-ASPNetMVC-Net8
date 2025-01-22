@@ -1,0 +1,71 @@
+﻿@model BlogCore_ASPNetMVC_Net8.Models.Slider
+
+@{
+    ViewData["Title"] = "Edit Slider";
+}
+
+<br />
+<br />
+<h3 class="text-center">Edit slider</h3>
+<form method="post" asp-action="Edit" enctype="multipart/form-data">
+
+    @* sending the article id to the controller *@
+    <input type="hidden" asp-for="Id" />
+
+    <div class="row px-2 border">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="col-8 mt-4">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Name"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Name" class="form-control" placeholder="Type your name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <br />
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="State"></label>
+                </div>
+                <br />
+                <div class="col-8">
+                    <input type="checkbox" asp-for="State" />
+                    <span asp-validation-for="State" class="text-danger"></span>
+                </div>
+            </div>
+            <br />
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="URLImage"></label>
+                </div>
+                <div class="col-8">
+                    <input type="file" name="archivos" asp-for="URLImage" id="subidaArchivo" class="form-control" />
+                    <span asp-validation-for="URLImage" class="text-danger"></span>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col">
+                    <button type="submit" class="btn-secondary form-control">Edit slider</button>
+                </div>
+                &nbsp;
+                <div class="col">
+                    <a asp-action="Index" class="btn btn-success form-control">Go back</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-4 pt-3">
+            <img src="@Model.URLImage" width="300px" style="border-radius:5px; border: 1px solid #bbb9b9;" />
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @* @{
+                <partial name="_ValidationScriptsPartial" />
+    } *@
+}
