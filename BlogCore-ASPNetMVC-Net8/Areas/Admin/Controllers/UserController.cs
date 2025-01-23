@@ -1,9 +1,11 @@
 ﻿using BlogCore_ASPNetMVC_Net8.Data.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace BlogCore_ASPNetMVC_Net8.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
     public class UserController : Controller
     {
