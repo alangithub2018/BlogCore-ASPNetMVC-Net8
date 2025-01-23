@@ -17,6 +17,7 @@ namespace BlogCore_ASPNetMVC_Net8.Data.Repository
             CategoryRepository = new CategoryRepository(_context);
             ArticleRepository = new ArticleRepository(_context);
             SliderRepository = new SliderRepository(_context);
+            UserRepository = new UserRepository(_context);
         }
 
         public ICategoryRepository CategoryRepository { get; private set; }
@@ -24,6 +25,8 @@ namespace BlogCore_ASPNetMVC_Net8.Data.Repository
         public IArticleRepository ArticleRepository { get; private set; }
 
         public ISliderRepository SliderRepository { get; private set; }
+
+        public IUserRepository UserRepository { get; private set; }
 
         public void Dispose()
         {
