@@ -14,6 +14,8 @@ namespace BlogCore_ASPNetMVC_Net8.Data.Repository.IRepository
 
         ISliderRepository SliderRepository { get; }
 
+        IUserRepository UserRepository { get; }
+
         void Save();
     }
 }

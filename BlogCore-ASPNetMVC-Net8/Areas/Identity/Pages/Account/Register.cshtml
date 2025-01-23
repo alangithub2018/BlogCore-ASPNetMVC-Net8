@@ -1,4 +1,5 @@
 ﻿@page
+@using BlogCore_ASPNetMVC_Net8.Utilities
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
@@ -7,7 +8,7 @@
 <h1 class="text-center">@ViewData["Title"]</h1>
 
 <div class="row">
-    <div class="col-md-6 offset-3">
+    <div class="col-md-8 offset-2">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h2>Create a new account.</h2>
             <hr />
@@ -51,6 +52,16 @@
                 <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
                 <label asp-for="Input.ConfirmPassword">Confirm Password</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <!--Roles selector-->
+            <div class="form-group row">
+                <div class="col-6">
+                    <h4>Select user role</h4>
+                </div>
+                <div class="col-5">
+                    <input type="radio" name="radUserRole" value="@Constants.Administrator" /> @Constants.Administrator
+                    <input type="radio" name="radUserRole" value="@Constants.Registered" /> @Constants.Registered
+                </div>
             </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
