@@ -30,6 +30,26 @@ namespace BlogCore_ASPNetMVC_Net8.Areas.Client.Controllers
             return View(homeVM);
         }
 
+        // To search for articles
+
+        [HttpGet]
+        public IActionResult SearchResult(string searchString, int page = 1, int pageSize = 6)
+        {
+            var articles = _workContainer.ArticleRepository.AsQueryable();
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                articles = articles.Where(a => a.Name.Contains(searchString) || a.Description.Contains(searchString));
+            }
+
+            // Pagination
+            var paginated = articles.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            var model = new PaginatedList<Article>(paginated.ToList(), articles.Count(), page, pageSize, searchString);
+
+            return View(model);
+        }
+
+
         [HttpGet]
         public IActionResult Details(int id)
         {
