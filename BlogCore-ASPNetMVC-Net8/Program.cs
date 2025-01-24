@@ -1,4 +1,5 @@
 using BlogCore_ASPNetMVC_Net8.Data;
+using BlogCore_ASPNetMVC_Net8.Data.Data.Initializer;
 using BlogCore_ASPNetMVC_Net8.Data.Repository;
 using BlogCore_ASPNetMVC_Net8.Data.Repository.IRepository;
 using BlogCore_ASPNetMVC_Net8.Models;
@@ -21,6 +22,9 @@ builder.Services.AddControllersWithViews();
 // Add WorkContainer to the Dependency Injection Container
 builder.Services.AddScoped<IWorkContainer, WorkContainer>();
 
+// Add DBInitializer to the Dependency Injection Container
+builder.Services.AddScoped<IDBInitializer, DBInitializer>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -34,6 +38,8 @@ else
 }
 app.UseStaticFiles();
 
+SeedData();
+
 app.UseRouting();
 
 app.UseAuthorization();
@@ -44,3 +50,11 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
+void SeedData()
+{
+    using var scope = app.Services.CreateScope();
+    var services = scope.ServiceProvider;
+    var dbInitializer = services.GetRequiredService<IDBInitializer>();
+    dbInitializer.Initialize();
+}

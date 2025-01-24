@@ -15,7 +15,7 @@
     <div class="row">
         @foreach (var article in Model.Articles.OrderBy(o => o.Id))
         {
-            <div class="col-4">
+            <div class="col-lg-4 col-sm-12 col-md-12">
                 <div class="card mb-3">
                     <img src="@article.URLImage" class="card-img-top" width="100%" alt="@article.Name" />
                     <div class="card-body">

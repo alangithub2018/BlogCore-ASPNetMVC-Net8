@@ -17,15 +17,15 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Navbar</a>
+            <div class="container">
+                <a class="navbar-brand" href="/"><img src="~/images/blogger.png" width="80" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarColor01">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">
+                            <a class="nav-link active" href="/">
                                 Home
                                 <span class="visually-hidden">(current)</span>
                             </a>
@@ -44,9 +44,13 @@
                             </li>
                         }
                     </ul>
-                    <form class="d-flex" asp-controller="Home" asp-action="SearchResult" method="get">
-                        <input class="form-control me-sm-4 text-dark" type="text" name="searchString" placeholder="Type your query">
-                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                    <form class="search d-flex ms-3 mr-4" asp-controller="Home" asp-action="SearchResult" method="get">
+                        <input class="form-control text-dark" type="text" name="searchString" placeholder="Type your query">
+                        <div class="input-group-append">
+                            <button class="btn btn-success" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
                     </form>
                 </div>
                 <partial name="_LoginPartial" />
@@ -65,9 +69,16 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - BlogCore_ASPNetMVC_Net8 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <!--Banner-->
+    <div class="container-fluid banner-container">
+        <div class="container banner-content">
+            <button type="button" class="btn btn-sucess subscribe-btn">Subscribe</button>
+        </div>
+    </div>
+
+    <footer class="border-top footer text-muted bg-dark" style="background-color: #1a1a1a !important;">
+        <div class="container py-4">
+            <span class="text-white">&copy; 2025 - BlogCore_ASPNetMVC_Net8 -</span> <a class="text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
