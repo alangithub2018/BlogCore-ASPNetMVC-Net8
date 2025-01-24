@@ -16,6 +16,12 @@ namespace BlogCore_ASPNetMVC_Net8.Data.Repository
         {
             _context = context;
         }
+
+        public IQueryable<Article> AsQueryable()
+        {
+            return _context.Set<Article>().AsQueryable();
+        }
+
         void IArticleRepository.Update(Article article)
         {
             var objectFromDB = _context.Article.FirstOrDefault(s => s.Id == article.Id);
