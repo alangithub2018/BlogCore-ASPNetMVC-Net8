@@ -16,13 +16,33 @@ namespace BlogCore_ASPNetMVC_Net8.Areas.Client.Controllers
             _workContainer = workContainer;
         }
 
+        // First version no pagination
+        //[HttpGet]
+        //public IActionResult Index()
+        //{
+        //    var homeVM = new HomeVM
+        //    {
+        //        Sliders = _workContainer.SliderRepository.GetAll(),
+        //        Articles = _workContainer.ArticleRepository.GetAll()
+        //    };
+
+        //    ViewBag.IsHome = true;
+
+        //    return View(homeVM);
+        //}
+
+        // Second version with pagination
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(int page = 1, int pageSize = 6)
         {
+            var articles = _workContainer.ArticleRepository.AsQueryable();
+            var paginatedEntries = articles.Skip((page - 1) * pageSize).Take(pageSize);
             var homeVM = new HomeVM
             {
                 Sliders = _workContainer.SliderRepository.GetAll(),
-                Articles = _workContainer.ArticleRepository.GetAll()
+                Articles = paginatedEntries.ToList(),
+                PageIndex = page,
+                TotalPages = (int)System.Math.Ceiling(articles.Count() / (double)pageSize)
             };
 
             ViewBag.IsHome = true;
@@ -33,7 +53,7 @@ namespace BlogCore_ASPNetMVC_Net8.Areas.Client.Controllers
         // To search for articles
 
         [HttpGet]
-        public IActionResult SearchResult(string searchString, int page = 1, int pageSize = 6)
+        public IActionResult SearchResult(string searchString, int page = 1, int pageSize = 3)
         {
             var articles = _workContainer.ArticleRepository.AsQueryable();
             if (!string.IsNullOrEmpty(searchString))

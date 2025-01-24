@@ -33,3 +33,35 @@
         </div>
     </div>
 }
+
+<br />
+<div class="text-center">
+    <!--Container to align it center-->
+    <nav aria-label="Navigatíon page">
+        <!--Navigation with area tag for accesibility-->
+        <ul class="pagination">
+            <!--button "Prev"-->
+            <li class="page-item @(Model.PageIndex > 1 ? "" : "disabled")">
+                <!--element of the list with 'page-item' and 'disabled' classes if no previous pages-->
+                <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-page="@(Model.PageIndex - 1)" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <!--loop to create the number of pages-->
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                    <!--element of the list with 'page-item' and 'active' classes if it is the current page-->
+                    <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-page="@i">@i</a>
+                </li>
+            }
+            <!--button "Next"-->
+            <li class="page-item @(Model.PageIndex < Model.TotalPages ? "" : "disabled")">
+                <!--element of the list with 'page-item' and 'disabled' classes if no next pages-->
+                <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-page="@(Model.PageIndex + 1)" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
