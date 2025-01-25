@@ -1,9 +1,29 @@
-﻿@model BlogCore_ASPNetMVC_Net8.Models.Article
+﻿@using System.Globalization
+@model BlogCore_ASPNetMVC_Net8.Models.Article
 
 @{
     ViewData["Title"] = "Article Details";
-    DateTime createdDate = DateTime.Parse(Model.CreatedDate);
-    string formattedDate = createdDate.ToString("dd/MM/yyyy");
+    // Define expected date formats
+    string[] formatos = { "dd/MM/yyyy hh:mm:ss tt", "dd/MM/yyyy HH:mm:ss", "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy hh:mm:ss tt" };
+    CultureInfo cultura = new CultureInfo("es-MX");
+
+    DateTime createdDate;
+    string formattedDate = "Invalid date";
+    if (DateTime.TryParseExact(Model.CreatedDate, formatos, cultura, DateTimeStyles.None, out createdDate))
+    {
+        // Si la fecha se analiza correctamente, formatea la fecha
+        formattedDate = createdDate.ToString("dd/MM/yyyy");
+    }
+    else
+    {
+        // Si la fecha no es válida, puedes manejar el error aquí
+        // Por ejemplo, registrar el error o mostrar un mensaje al usuario
+        <text>
+            <script>
+                console.error("Invalid date: @Model.CreatedDate");
+            </script>
+        </text>
+    }
 }
 <br/>
 <div class="container">
