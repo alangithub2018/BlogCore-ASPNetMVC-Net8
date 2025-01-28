@@ -1,7 +1,9 @@
-﻿using BlogCore_ASPNetMVC_Net8.Data.Repository.IRepository;
+﻿using BlogCore_ASPNetMVC_Net8.Data;
+using BlogCore_ASPNetMVC_Net8.Data.Repository.IRepository;
 using BlogCore_ASPNetMVC_Net8.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogCore_ASPNetMVC_Net8.Areas.Admin.Controllers
 {
@@ -10,10 +12,12 @@ namespace BlogCore_ASPNetMVC_Net8.Areas.Admin.Controllers
     public class CategoryController : Controller
     {
         private readonly IWorkContainer _workContainer;
+        private readonly ApplicationDbContext _context;
 
-        public CategoryController(IWorkContainer workContainer)
+        public CategoryController(IWorkContainer workContainer, ApplicationDbContext context)
         {
             _workContainer = workContainer;
+            _context = context;
         }
 
         [HttpGet]
@@ -73,7 +77,9 @@ namespace BlogCore_ASPNetMVC_Net8.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Json(new { data = _workContainer.CategoryRepository.GetAll() });
+            //return Json(new { data = _workContainer.CategoryRepository.GetAll() });
+            // Calling a stored procedure
+            return Json(new {data = _context.Category.FromSqlRaw<Category>("spGetCategories").ToList() } );
         }
 
         [HttpDelete]
